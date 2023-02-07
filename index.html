@@ -1,2 +1,49 @@
-<script type="module" src="index.js"></script>
-<h1>Hello World</h1>
+<style>
+    * {
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        display: grid;
+        grid-template: 3rem 1fr 3rem /  repeat(2, 1fr);
+        height: 100vh;
+    }
+
+    .header {
+        grid-column: 1 / 3;
+        background-color: lightgray;
+    }
+
+    #note-component {
+        grid-column: 1 / 2;
+        height: 100%;
+    }
+
+    #edit-component {
+        grid-column: 2 / 3;
+        height: 100%;
+    }
+
+    .header, footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .footer {
+        grid-column: 1 / 3;
+        background-color: lightgray;
+    }
+</style>
+
+
+<body class="container">
+    <header class="header">Note Me</header>
+    <note-component id="note-component "></note-component>
+    <edit-component id="edit-component"></edit-component>
+    <footer class="footer">@charleslemmert</footer>
+</body>
+
+<script type="module" src="./index.js"></script>

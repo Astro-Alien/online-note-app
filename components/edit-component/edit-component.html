@@ -1,1 +1,48 @@
-<h1>hello there</h1>
+<style>
+    :host {
+        display: block;
+        height: 100%;
+        width: 100%;
+        color: black;
+    }
+
+    #edit-form {
+        display: flex;
+        flex-direction: column;
+    }
+    #title-label, #note-label {
+       margin: 1rem 1rem 0 0;
+    }
+    #title, #note {
+        width: 20rem;
+        margin: 0 1rem 0 0;
+    }
+
+    #note {
+        height: 10rem;
+    }
+
+    #buttons {
+        display: flex;
+        flex-direction: row;
+        margin: 1rem 0.5rem 0 0;
+    }
+</style>
+<h1>Edit screen</h1>
+
+<main>
+    <form id="edit-form">
+        <label for="title" id="title-label" >Title</label>
+        <input type="text" id="title" name="title" placeholder="Enter your title..." required>
+
+        <label for="note" id="note-label" >Note</label>
+        <textarea id="note" name="note" placeholder="Enter your note..." required></textarea>
+    </form>
+
+    <div id="buttons">
+        <button data-action="create">New Note</button>
+        <button data-action="read">Fetch Note</button>
+        <button data-action="update">Update Note</button>
+        <button data-action="delete">Delete Note</button>
+    </div>
+</main>

@@ -55,8 +55,7 @@ class DatabaseWorker {
      * @param data - The message to send
      */
     async createPosting(data) {
-        const db = await this.#create(data);
-        console.log(db);
+        console.log("I have reached the create postMessage method");
     }
 
     /**
@@ -64,7 +63,7 @@ class DatabaseWorker {
      * @param data - The data that is being read.
      */
     async readPosting(data) {
-        const db = await this.#read(data);
+        console.log("I have reached the read postMessage method");
     }
 
     /**
@@ -72,7 +71,7 @@ class DatabaseWorker {
      * @param data - The data to be updated.
      */
     async updatePosting(data) {
-        const db = await this.#update(data);
+        console.log("I have reached the update postMessage method");
     }
 
     /**
@@ -80,11 +79,12 @@ class DatabaseWorker {
      * @param data - {
      */
     async deletePosting(data) {
-        const db = await this.#deleteRecord(data);
+        console.log("I have reached the delete postMessage method");
     }
 }
 
 self.onmessage = async (event) => {
+    console.log("I heard you from the web worker")
     const dbWorker = new DatabaseWorker();
     const {action, data} = event.data;
 
