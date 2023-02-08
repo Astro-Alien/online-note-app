@@ -1,6 +1,7 @@
 class EditComponent extends HTMLElement {
     #clickHandler;
     #action;
+    #dispatchHandler;
 
     constructor() {
         super();
@@ -19,6 +20,7 @@ class EditComponent extends HTMLElement {
     }
 
     async load() {
+        this.#dispatchHandler = this.requestAction.bind(this);
         this.#clickHandler = this.#click.bind(this);
         this.shadowRoot.addEventListener("click", this.#clickHandler);
     }
@@ -70,12 +72,14 @@ class EditComponent extends HTMLElement {
      * the requestAction method creates a new postMessage object and sends it to the database-worker.
      */
     async requestAction() {
+        const worker = new Worker("./workers/database-worker.js");
         const action= this.#action;
         const data = {
             title: "test title",
             note: "test note"
         }
-        self.parent.postMessage({action,data});
+        //self.parent.postMessage({action,data});
+        worker.postMessage({action,data});
     }
 }
 customElements.define('edit-component', EditComponent);

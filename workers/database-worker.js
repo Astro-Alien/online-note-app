@@ -17,7 +17,8 @@ class DatabaseWorker {
      * @returns The return value of the create method of the database object.
      */
     async #create(record) {
-        return globalThis.database.create(record);
+        console.log(record)
+        // return globalThis.database.create(record);
     }
 
     /**
@@ -55,7 +56,7 @@ class DatabaseWorker {
      * @param data - The message to send
      */
     async createPosting(data) {
-        console.log("I have reached the create postMessage method");
+       await this.#create(data);
     }
 
     /**
@@ -84,7 +85,6 @@ class DatabaseWorker {
 }
 
 self.onmessage = async (event) => {
-    console.log("I heard you from the web worker")
     const dbWorker = new DatabaseWorker();
     const {action, data} = event.data;
 
