@@ -18,12 +18,14 @@
  * delete() - deletes a record from the store based on the id
  * filter() - filters records from the store based on the filter object
  * */
-
-export default class Database {
+class Database {
     #databaseName = "notes";
     #storeName = "notes";
     #database = null;
 
+    hello() {
+        console.log("hello")
+    }
     /**
      * > This function creates a new instance of the Database class, connects to the database, and returns the instance
      * @returns The database instance.
@@ -107,7 +109,6 @@ export default class Database {
      */
     create(record) {
         return this.#transactionsOperation((store) => {
-            console.log("Creating a record...");
             return store.add(record);
         });
     }
@@ -117,7 +118,6 @@ export default class Database {
      */
     read(id) {
         return this.#transactionsOperation((store) => {
-            console.log("Reading a record...");
             return store.get(id);
         });
     }
@@ -127,7 +127,6 @@ export default class Database {
      */
     update(record) {
         return this.#transactionsOperation((store) => {
-            console.log("Updating a record...");
             return store.put(record);
         });
     }
@@ -137,7 +136,6 @@ export default class Database {
      */
     deleteRecord( id) {
         return this.#transactionsOperation((store) => {
-            console.log("Deleting a record...");
             return store.delete(id);
         });
     }
@@ -147,8 +145,8 @@ export default class Database {
      */
     filter(filter) {
         return this.#transactionsOperation((store) => {
-            console.log("Filtering records...");
             return store.index(filter.index).getAll(filter.value);
         });
     }
 }
+globalThis.viewModel =  new Database();

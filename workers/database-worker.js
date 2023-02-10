@@ -1,4 +1,4 @@
-importScripts("./resources/database/database.js");
+importScripts("./../resources/database/database.js");
 /**
  * @class DatabaseWorker - Worker for database wrapper class
  *
@@ -17,8 +17,7 @@ class DatabaseWorker {
      * @returns The return value of the create method of the database object.
      */
     async #create(record) {
-        console.log(record)
-        // return globalThis.database.create(record);
+        return globalThis.database.create(record);
     }
 
     /**
@@ -56,7 +55,8 @@ class DatabaseWorker {
      * @param data - The message to send
      */
     async createPosting(data) {
-       await this.#create(data);
+        const id = await this.#create(data);
+        self.postMessage({id});
     }
 
     /**
@@ -64,7 +64,7 @@ class DatabaseWorker {
      * @param data - The data that is being read.
      */
     async readPosting(data) {
-        console.log("I have reached the read postMessage method");
+        console.log(data)
     }
 
     /**
@@ -82,6 +82,7 @@ class DatabaseWorker {
     async deletePosting(data) {
         console.log("I have reached the delete postMessage method");
     }
+
 }
 
 self.onmessage = async (event) => {
@@ -89,6 +90,16 @@ self.onmessage = async (event) => {
     const {action, data} = event.data;
 
     if (action) {
+        await initDB();
         await dbWorker[`${action}Posting`](data);
     }
+}
+async function initDB() {
+    const db = new Database();
+    return new Promise(resolve => {
+        db.connectToDB().then(database => {
+            globalThis.database = database;
+            resolve();
+        })
+    })
 }

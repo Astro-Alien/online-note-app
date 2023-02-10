@@ -2,6 +2,7 @@ class EditComponent extends HTMLElement {
     #clickHandler;
     #action;
     #dispatchHandler;
+    #data;
 
     constructor() {
         super();
@@ -17,6 +18,7 @@ class EditComponent extends HTMLElement {
         this.shadowRoot.removeEventListener("click", this.#clickHandler);
         this.#clickHandler = null;
         this.#action = null;
+        this.#data = null;
     }
 
     async load() {
@@ -32,54 +34,23 @@ class EditComponent extends HTMLElement {
      */
     async #click(event) {
         if (event.target.dataset.action) {
-            await this[event.target.dataset.action]();
+            const title = this.shadowRoot.querySelector("#title").value;
+            const note = this.shadowRoot.querySelector("#note").value;
+            this.#action = event.target.dataset.action;
+            this.#data = {title, note};
+            await this.requestAction();
         }
     }
 
-    /**
-     * The create function calls the requestAction method and request a record to be created.
-     */
-    async create() {
-        this.#action = "create";
-        await this.requestAction();
-    }
-
-    /**
-     * The retrieve() function calls the requestAction method and request a record to be read.
-     */
-    async read() {
-        this.#action = "read";
-        await this.requestAction();
-    }
-
-    /**
-     * The update function calls the requestAction method and request a record to be updated.
-     */
-    async update() {
-        this.#action = "update";
-        await this.requestAction();
-    }
-
-    /**
-     * The delete method calls the requestAction method and request a record to be deleted.
-     */
-    async delete() {
-        this.#action = "delete";
-        await this.requestAction();
-    }
-
-    /**
-     * the requestAction method creates a new postMessage object and sends it to the database-worker.
-     */
     async requestAction() {
         const worker = new Worker("./workers/database-worker.js");
-        const action= this.#action;
-        const data = {
-            title: "test title",
-            note: "test note"
+        const action = this.#action;
+        const data = this.#data;
+        worker.postMessage({action, data});
+        worker.onmessage = function (message) {
+            this.dispatchEvent(new CustomEvent("recordID", {detail: message.data?.id, composed: true, bubbles: true}))
         }
-        //self.parent.postMessage({action,data});
-        worker.postMessage({action,data});
     }
 }
+
 customElements.define('edit-component', EditComponent);
