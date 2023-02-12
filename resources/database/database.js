@@ -93,12 +93,10 @@ class Database {
             const request = callback(store);
 
             request.onsuccess = (event) => {
-                console.log("Successfully performed the operation...");
                 resolve(event.target.result);
             };
 
             request.onerror = (event) => {
-                console.error("An error has occurred while trying to perform the operation: ", event);
                 reject(event);
             };
         });
@@ -134,9 +132,18 @@ class Database {
     /**
      * deletes a record from the store based on the id
      */
-    deleteRecord( id) {
+    deleteRecord(id) {
         return this.#transactionsOperation((store) => {
             return store.delete(id);
+        });
+    }
+
+    /**
+     * get all records from the store
+     */
+    getAll() {
+        return this.#transactionsOperation((store) => {
+            return store.getAll();
         });
     }
 

@@ -42,6 +42,14 @@ class DatabaseWorker {
     }
 
     /**
+     * @method This function returns all the data in the database
+     * @returns The getAll() function from the database.js file.
+     */
+    async #getAll() {
+        return globalThis.database.getAll();
+    }
+
+    /**
      * @method This function deletes a record from the database
      * @param id - The id of the record to delete.
      * @returns The result of the deleteRecord function.
@@ -56,7 +64,7 @@ class DatabaseWorker {
      */
     async createPosting(data) {
         const id = await this.#create(data);
-        self.postMessage({id});
+        self.postMessage(id);
     }
 
     /**
@@ -64,7 +72,8 @@ class DatabaseWorker {
      * @param data - The data that is being read.
      */
     async readPosting(data) {
-        console.log(data)
+          const record = await this.#read(data);
+          self.postMessage(record);
     }
 
     /**
@@ -73,6 +82,15 @@ class DatabaseWorker {
      */
     async updatePosting(data) {
         console.log("I have reached the update postMessage method");
+    }
+
+    /**
+     * @method It gets all the records from the IndexedDB and sends them back to the main thread
+     * @param data - The data passed from the main thread.
+     */
+    async getAllPosting(data) {
+        const record = await this.#getAll();
+        self.postMessage(record);
     }
 
     /**

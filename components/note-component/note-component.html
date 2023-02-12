@@ -1,13 +1,90 @@
 <style>
     :host {
-        display: block;
-        height: 100%;
-        width: 100%;
-        color: black;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+        background: rgba(131, 134, 138, 0.51);
+        height: 45rem;
+        width: 52rem;
+
+        border-radius: 1rem;
+        box-sizing: border-box;
+    }
+
+    #note-list {
+        display: inherit;
+        flex-direction: column;
+        justify-content: left;
+        margin: 2rem;
+        cursor: pointer;
+        overflow-y: auto;
+    }
+
+    #heading {
+        display: inherit;
+        justify-content: center;
+        align-items: center;
+        text-decoration: underline;
+        color: white;
+    }
+
+    #details {
+        border: 2px solid #aaa;
+        border-radius: 0.2rem;
+        margin-bottom: 0.5rem;
+        padding: 0.62rem;
+        color: white;
+        font-size: 1.1rem;
+    }
+
+    #details[open] summary {
+        border-bottom: 1px solid #aaa;
+        margin-bottom: 0.62rem;
+    }
+
+    #search {
+        display: inherit;
+        justify-content: center;
+        align-items: center;
+    }
+
+    input {
+        width: 20rem;
+        height: 2rem;
+        border-radius: 0.2rem;
+        border: none;
+        padding: 0.2rem;
+        font-size: 1.1rem;
+    }
+
+    #filter {
+        margin: 1rem;
+        width: 5rem;
+        height: 2rem;
+        border: none;
+        border-radius: 0.2rem;
+    }
+
+    #filter:hover {
+        background: rgba(131, 134, 138, 0.51);
+        cursor: pointer;
     }
 </style>
 
-<div id="container">
 
+<div id="heading">
+    <h1>Note Screen</h1>
 </div>
-<h1>Note Screen</h1>
+
+<div id="search">
+    <input type="text" placeholder="Search Notes"/>
+    <button id="filter">Filter</button>
+</div>
+<template id="note">
+    <details id="details">
+        <summary></summary>
+        <p></p>
+    </details>
+</template>
+
+<div id="note-list"></div>

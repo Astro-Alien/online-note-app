@@ -47,9 +47,9 @@ class EditComponent extends HTMLElement {
         const action = this.#action;
         const data = this.#data;
         worker.postMessage({action, data});
-        worker.onmessage = function (message) {
-            this.dispatchEvent(new CustomEvent("recordID", {detail: message.data?.id, composed: true, bubbles: true}))
-        }
+        worker.onmessage = function(event) {
+            document.dispatchEvent(new CustomEvent('recordID', {detail: event.data, bubbles: true}));
+        };
     }
 }
 

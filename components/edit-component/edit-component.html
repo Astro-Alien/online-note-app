@@ -1,9 +1,17 @@
 <style>
     :host {
-        display: block;
-        height: 100%;
-        width: 100%;
-        color: black;
+        overflow-x: hidden;
+        background: rgba(131, 134, 138, 0.51);
+        height: 45rem;
+        width: 52rem;
+        border-radius: 1rem;
+        box-sizing: border-box;
+    }
+    main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
     #edit-form {
@@ -11,26 +19,41 @@
         flex-direction: column;
     }
     #title-label, #note-label {
-       margin: 1rem 1rem 0 0;
+        margin: 1rem 1rem 0.5rem 1rem;
     }
     #title, #note {
-        width: 20rem;
-        margin: 0 1rem 0 0;
+        width: 25rem;
+        margin: 0 1rem 0 1rem;
+    }
+    #title {
+        height: 2rem;
+        border-radius: 0.2rem;
+        border: none;
+        padding: 0.2rem;
+        font-size: 1.1rem;
     }
 
     #note {
-        height: 10rem;
+        height: 20rem;
+        border-radius: 0.2rem;
+        border: none;
+        padding: 0.2rem;
+        font-size: 1.1rem;
     }
 
-    #buttons {
-        display: flex;
-        flex-direction: row;
-        margin: 1rem 0.5rem 0 0;
+    button{
+
+        margin:1rem;
+        width: 5rem;
+        height: 2rem;
+        border: none;
+        border-radius: 0.2rem;
     }
 </style>
-<h1>Edit screen</h1>
 
 <main>
+    <h1>Edit screen</h1>
+
     <form id="edit-form">
         <label for="title" id="title-label" >Title</label>
         <input type="text" id="title" name="title" placeholder="Enter your title..." required>
@@ -41,7 +64,6 @@
 
     <div id="buttons">
         <button data-action="create">New Note</button>
-        <button data-action="read">Fetch Note</button>
         <button data-action="update">Update Note</button>
         <button data-action="delete">Delete Note</button>
     </div>
