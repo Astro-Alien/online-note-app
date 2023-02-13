@@ -55,7 +55,7 @@ class DatabaseWorker {
      * @returns The result of the deleteRecord function.
      */
     async #deleteRecord(id) {
-        return globalThis.database.deleteRecord(id);
+        return globalThis.database.deleteRecord(parseInt(id));
     }
 
     /**
@@ -64,7 +64,8 @@ class DatabaseWorker {
      */
     async createPosting(data) {
         const id = await this.#create(data);
-        self.postMessage(id);
+        const record = await this.#read(id);
+        self.postMessage(record);
     }
 
     /**
@@ -81,7 +82,7 @@ class DatabaseWorker {
      * @param data - The data to be updated.
      */
     async updatePosting(data) {
-        console.log("I have reached the update postMessage method");
+        await this.#update(data);
     }
 
     /**
@@ -98,9 +99,8 @@ class DatabaseWorker {
      * @param data - {
      */
     async deletePosting(data) {
-        console.log("I have reached the delete postMessage method");
+        await this.#deleteRecord(data);
     }
-
 }
 
 self.onmessage = async (event) => {

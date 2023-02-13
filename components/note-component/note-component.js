@@ -1,5 +1,6 @@
 class NoteComponent extends HTMLElement {
     #eventHandler;
+    #clickHandler;
     #id;
     #content;
 
@@ -14,35 +15,40 @@ class NoteComponent extends HTMLElement {
 
     async connectedCallback() {
         this.shadowRoot.innerHTML = await fetch(import.meta.url.replace(".js", ".html")).then(result => result.text());
-        this.#eventHandler = this.#set_id.bind(this);
-        document.addEventListener("recordID", this.#eventHandler);
+
         this.worker = new Worker("./workers/database-worker.js");
 
         this.worker.postMessage({action: "getAll"});
         this.worker.onmessage = this.#get_all_data.bind(this);
+
+        this.#eventHandler = this.#get_record.bind(this);
+        document.addEventListener("record", this.#eventHandler);
+
+        this.#clickHandler = this.#get_id.bind(this);
+        this.shadowRoot.querySelector("#note-list").addEventListener("click", this.#clickHandler);
     }
 
     async disconnectedCallback() {
-        document.removeEventListener("recordID", this.#eventHandler);
-        this.#id = null
+        document.removeEventListener("record", this.#eventHandler);
+        this.shadowRoot.querySelector("#note-list").removeEventListener("click", this.#clickHandler);
         this.#content = null;
         this.#eventHandler = null;
+        this.#clickHandler = null;
+        this.#id = null;
     }
 
-    async #set_id(event) {
-        this.#id = event.detail;
-        await this.#get_record();
+    async #get_id(event) {
+        if(event.target.dataset.id){
+            this.#id = event.target.dataset.id;
+            document.dispatchEvent(new CustomEvent('recordID', {detail: this.#id, bubbles: true}));
+        }
     }
 
-    async #get_record() {
-        this.worker.postMessage({action: "read", data: this.#id});
-        this.worker.onmessage = this.#get_data.bind(this);
-    }
-
-    async #get_data(event) {
-        this.#content = [event.data];
+    async #get_record(event) {
+        this.#content = [event.detail];
         await this.#render_all_data();
     }
+
 
     async #get_all_data(event) {
         this.#content = event.data;
@@ -59,7 +65,7 @@ class NoteComponent extends HTMLElement {
             const clone = template.content.cloneNode(true);
             clone.querySelector("summary").textContent = item.title;
             clone.querySelector("p").textContent = item.note;
-            clone.querySelector("#details").setAttribute("data-id", item.id);
+            clone.querySelector("summary").setAttribute("data-id", item.id);
             container.appendChild(clone);
         });
     }
