@@ -27,6 +27,7 @@ class EditComponent extends HTMLElement {
         this.#id = null;
         this.#title = null;
         this.#note = null
+        this.worker = null;
     }
 
     async load() {
@@ -62,7 +63,7 @@ class EditComponent extends HTMLElement {
     }
 
     /**
-     * @function create_record -The function sends a message to the worker thread to create a new record in the database
+     * @function create_record - The function sends a message to the worker thread to create a new record in the database
      * @param event - The event object that was triggered.
      */
     async create_record(event) {
@@ -75,6 +76,7 @@ class EditComponent extends HTMLElement {
      * @function update_record - The function sends a message to the worker thread to update the record in the database
      */
     async update_record() {
+        alert("Record updated Refresh page to see changes");
         const data = {
             id: parseInt(this.#id),
             title: this.#title.value,
@@ -88,6 +90,7 @@ class EditComponent extends HTMLElement {
      *
      */
     async delete_record() {
+        alert("Record deleted Refresh page to see changes");
         this.worker.postMessage({action: "delete", data: this.#id});
     }
 

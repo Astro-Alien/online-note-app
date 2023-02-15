@@ -3,10 +3,6 @@
         display: flex;
         flex-direction: column;
         overflow-x: hidden;
-        background: rgba(131, 134, 138, 0.51);
-        height: 45rem;
-        width: 52rem;
-
         border-radius: 1rem;
         box-sizing: border-box;
     }
@@ -25,7 +21,6 @@
         justify-content: center;
         align-items: center;
         text-decoration: underline;
-        color: white;
     }
 
     #details {
@@ -57,18 +52,6 @@
         font-size: 1.1rem;
     }
 
-    #filter {
-        margin: 1rem;
-        width: 5rem;
-        height: 2rem;
-        border: none;
-        border-radius: 0.2rem;
-    }
-
-    #filter:hover {
-        background: rgba(131, 134, 138, 0.51);
-        cursor: pointer;
-    }
 </style>
 
 
@@ -76,10 +59,6 @@
     <h1>Note Screen</h1>
 </div>
 
-<div id="search">
-    <input type="text" placeholder="Search Notes"/>
-    <button id="filter">Filter</button>
-</div>
 <template id="note">
     <details id="details">
         <summary></summary>

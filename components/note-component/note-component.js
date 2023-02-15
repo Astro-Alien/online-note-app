@@ -3,8 +3,9 @@ class NoteComponent extends HTMLElement {
     #clickHandler;
     #id;
     #content;
+    #noteList;
 
-    get content() {
+        get content() {
         return this.#content;
     }
 
@@ -15,17 +16,7 @@ class NoteComponent extends HTMLElement {
 
     async connectedCallback() {
         this.shadowRoot.innerHTML = await fetch(import.meta.url.replace(".js", ".html")).then(result => result.text());
-
-        this.worker = new Worker("./workers/database-worker.js");
-
-        this.worker.postMessage({action: "getAll"});
-        this.worker.onmessage = this.#get_all_data.bind(this);
-
-        this.#eventHandler = this.#get_record.bind(this);
-        document.addEventListener("record", this.#eventHandler);
-
-        this.#clickHandler = this.#get_id.bind(this);
-        this.shadowRoot.querySelector("#note-list").addEventListener("click", this.#clickHandler);
+        await this.load();
     }
 
     async disconnectedCallback() {
@@ -35,6 +26,21 @@ class NoteComponent extends HTMLElement {
         this.#eventHandler = null;
         this.#clickHandler = null;
         this.#id = null;
+        this.worker = null;
+        this.#noteList = null;
+    }
+
+    async load() {
+        this.worker = new Worker("./workers/database-worker.js");
+        this.worker.postMessage({action: "getAll"});
+        this.worker.onmessage = this.#get_all_data.bind(this);
+
+        this.#eventHandler = this.#get_record.bind(this);
+        document.addEventListener("record", this.#eventHandler);
+
+        this.#noteList =   this.shadowRoot.querySelector("#note-list")
+        this.#clickHandler = this.#get_id.bind(this);
+        this.#noteList.addEventListener("click", this.#clickHandler);
     }
 
     async #get_id(event) {

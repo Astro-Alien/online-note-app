@@ -146,14 +146,5 @@ class Database {
             return store.getAll();
         });
     }
-
-    /**
-     * filters records from the store based on the filter object
-     */
-    filter(filter) {
-        return this.#transactionsOperation((store) => {
-            return store.index(filter.index).getAll(filter.value);
-        });
-    }
 }
 globalThis.viewModel =  new Database();
