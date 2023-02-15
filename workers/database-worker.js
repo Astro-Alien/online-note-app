@@ -1,4 +1,4 @@
-importScripts("./resources/database/database.js");
+importScripts("./../resources/database/database.js");
 /**
  * @class DatabaseWorker - Worker for database wrapper class
  *
@@ -12,7 +12,7 @@ importScripts("./resources/database/database.js");
  */
 class DatabaseWorker {
     /**
-     * @method It creates a record
+     * @method #create - It creates a record
      * @param record - The record to be created.
      * @returns The return value of the create method of the database object.
      */
@@ -33,7 +33,7 @@ class DatabaseWorker {
     }
 
     /**
-     * @method It updates a record in the database.
+     * @method #update - It updates a record in the database.
      * @param record - The record to update.
      * @returns The return value of the update() method of the database object.
      */
@@ -42,45 +42,64 @@ class DatabaseWorker {
     }
 
     /**
-     * @method This function deletes a record from the database
+     * @method #getAll - This function returns all the data in the database
+     * @returns The getAll() function from the database.js file.
+     */
+    async #getAll() {
+        return globalThis.database.getAll();
+    }
+
+    /**
+     * @method #deleteRecord - This function deletes a record from the database
      * @param id - The id of the record to delete.
      * @returns The result of the deleteRecord function.
      */
     async #deleteRecord(id) {
-        return globalThis.database.deleteRecord(id);
+        return globalThis.database.deleteRecord(parseInt(id));
     }
 
     /**
-     * @method This function creates a new postMessage object and sends it to the main thread.
+     * @method createPosting - This function creates a new postMessage object and sends it to the main thread.
      * @param data - The message to send
      */
     async createPosting(data) {
-        const db = await this.#create(data);
-        console.log(db);
+        const id = await this.#create(data);
+        const record = await this.#read(id);
+        self.postMessage(record);
     }
 
     /**
-     * @method This function filters records from the database. and creates a new postMessage object and sends it to the main thread.
+     * @method readPosting - This function filters records from the database. and creates a new postMessage object and sends it to the main thread.
      * @param data - The data that is being read.
      */
     async readPosting(data) {
-        const db = await this.#read(data);
+          const record = await this.#read(data);
+          self.postMessage(record);
     }
 
     /**
-     * @method This function updates a record in the database and creates a new postMessage object and sends it to the main thread.
+     * @method updatePosting - This function updates a record in the database and creates a new postMessage object and sends it to the main thread.
      * @param data - The data to be updated.
      */
     async updatePosting(data) {
-        const db = await this.#update(data);
+        await this.#update(data);
     }
 
     /**
-     * @method This function deletes a posting from the database and creates a new postMessage object and sends it to the main thread.
-     * @param data - {
+     * @method getAllPosting - It gets all the records from the IndexedDB and sends them back to the main thread
+     * @param data - The data passed from the main thread.
+     */
+    async getAllPosting(data) {
+        const record = await this.#getAll();
+        self.postMessage(record);
+    }
+
+    /**
+     * @method deletePosting - This function deletes a posting from the database and creates a new postMessage object and sends it to the main thread.
+     * @param data - The data to be deleted.
      */
     async deletePosting(data) {
-        const db = await this.#deleteRecord(data);
+        await this.#deleteRecord(data);
     }
 }
 
@@ -89,6 +108,16 @@ self.onmessage = async (event) => {
     const {action, data} = event.data;
 
     if (action) {
+        await initDB();
         await dbWorker[`${action}Posting`](data);
     }
+}
+async function initDB() {
+    const db = new Database();
+    return new Promise(resolve => {
+        db.connectToDB().then(database => {
+            globalThis.database = database;
+            resolve();
+        })
+    })
 }

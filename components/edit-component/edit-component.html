@@ -1,1 +1,68 @@
-<h1>hello there</h1>
+<style>
+    :host {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow-x: hidden;
+        border-radius: 1rem;
+        box-sizing: border-box;
+    }
+
+    #edit-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #title-label, #note-label {
+        margin: 1rem 1rem 0.5rem 1rem;
+
+        font-weight: bold;
+    }
+
+    #title, #note {
+        margin: 0 1rem 0 1rem;
+    }
+
+    #title {
+        border-radius: 0.2rem;
+        border: none;
+        padding: 0.2rem;
+        font-size: 1.1rem;
+    }
+
+    #note {
+        border-radius: 0.2rem;
+        border: none;
+        height: 20rem;
+        width: 23rem;
+        padding: 0.2rem;
+        font-size: 1.1rem;
+    }
+
+    button {
+        margin: 1rem;
+        width: 6rem;
+        height: 2rem;
+        border: none;
+        border-radius: 0.2rem;
+        color: #ffffff;
+        background: #000000;
+    }
+</style>
+
+<h1>Edit screen</h1>
+
+<form id="edit-form">
+    <label for="title" id="title-label">Title</label>
+    <input type="text" id="title" name="title" placeholder="Enter your title..." required>
+
+    <label for="note" id="note-label">Note</label>
+    <textarea id="note" name="note" placeholder="Enter your note..." required></textarea>
+</form>
+
+<div id="buttons">
+    <button data-action="create">New Note</button>
+    <button data-action="update">Update Note</button>
+    <button data-action="delete">Delete Note</button>
+</div>
